@@ -1,26 +1,18 @@
 Kekulean
 ========
 ###Overall Version 2.0.0
-###Terminal Version 1.1.1
+###Terminal Version 1.1.2
 ###Bug Fixes
--The Windows issue of not reading any text document in correctly has now been fixed.
-
--The remove duplicates feature for combined graphs is now fixed. Automatic renaming of files no longer crashes the program. This also means that analyze combined graphs now works as well.
-
--Several memory leaks have been fixed.
-
--Combined graphs has been sped up and should be almost 2x as fast as he previous version.
+-Fixed an issue with Combine Graphs where the method would immediately break when trying to see if there were graphs already in the combined folders.
 
 ###Additions
--Remove duplicates will run at the end of combine graphs.
+-Upgraded the settings reader to the new GUI version; this speeds up the program significantly.
 
 ###Issues
 - If the two graphs being combined during Combine Graphs touch at an non-required edge the program will crash. This is currently being worked on to find a way to determine face touchings, not just face overlaps.
 
 ###Coming Soon
 - Remove duplicates should be universal, not just for combine graphs.
-
-- Keep an eye out for version 2.0.0 in the coming weeks.
 
 - More bug fixes!!!
 

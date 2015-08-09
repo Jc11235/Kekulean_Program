@@ -43,18 +43,26 @@ def getInput(fileName):
 	return faceGraph
 
 def getSettings():
-	settingsFile = open('settings.txt', 'r')
-	
-	line = settingsFile.readline()
+	fileName = "settings.txt"
+
+	inputFile = open(fileName, 'r')
+		
+	lineNumber = 0
+
+	minW = 0
+	maxW = 0
+	minH = 0
+	maxH = 0
+
+	line = inputFile.readline()
 	while len(line) > 0:
 		line = line.replace('\n', '')
-		line = line.split(":")		
-		
-		settings[line[0]] = float(line[1])
 
-		line = settingsFile.readline()
+		settings[lineNumber] = float(line)
 
-	settingsFile.close()
+		line = inputFile.readline()
+		lineNumber += 1
+	inputFile.close()
 
 def analyzeGraphFromFile(fileName="graph.txt"):
 	faceGraph = getInput(fileName)
@@ -202,11 +210,11 @@ def createRandomKekulean():
 
 #Creates a random planar graph, which may not be connected			
 def createRandomGraph():
-	height = randint(settings["MIN_HEIGHT"], settings["MAX_HEIGHT"])
+	height = randint(settings[2], settings[3])
 	
 	randGraph = []
 	for i in range(height):
-		rowLength = randint(settings["MIN_WIDTH"], settings["MAX_WIDTH"])
+		rowLength = randint(settings[0], settings[1])
 		row = getRow(rowLength, i)
 		while len(row) == 0:
 			row = getRow(rowLength, i)
@@ -244,7 +252,7 @@ def getRow(rl, rowNum):
 	r = []
 	for j in range(rl): 
 			chance = randint(0, 100)
-			if chance > settings['POROSITY'] * 100:
+			if chance > settings[4] * 100:
 				r.append(Face(j, rowNum))
 	return r
 
@@ -936,9 +944,15 @@ def findRequiredEdges(hours=0):
 		t2 = time.time()
 
 def combineGraphs(path = "CombinedTemps",extension = ".txt"):
-	num_files = len([f for f in os.listdir(path)
-                if os.path.isfile(os.path.join(path, f))])
-	num_files -= 1
+
+	folderName = "CombinedTemps"
+	if os.path.exists(folderName):
+
+		num_files = len([f for f in os.listdir(path)
+                	if os.path.isfile(os.path.join(path, f))])
+		num_files -= 1
+	else:
+		num_files = 0
 
 	graphNumber = 0
 	superGraphNumber = num_files

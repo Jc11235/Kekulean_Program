@@ -1,12 +1,15 @@
 Kekulean
 ========
 ###Overall Version 2.0.0
-###Terminal Version 1.1.2
-###Bug Fixes
--Fixed an issue with Combine Graphs where the method would immediately break when trying to see if there were graphs already in the combined folders.
+###Terminal Version 1.1.3
+
+###Fixes
+-Fixed several spelling errors in the README.
 
 ###Additions
--Upgraded the settings reader to the new GUI version; this speeds up the program significantly.
+-The user can now test a subset conjecture that looks to see if the faces belong to the Clar set are always a subset of the faces belonging to the Fries set.
+
+-The required edge find method in "analyze a graph from file (1)" has been removed for now.
 
 ###Issues
 - If the two graphs being combined during Combine Graphs touch at an non-required edge the program will crash. This is currently being worked on to find a way to determine face touchings, not just face overlaps.
@@ -21,7 +24,7 @@ Introduction
 ###What is this program?
 
 The task of finding Kekulean structures (or perfect matchings from a graph theory perspective) in benzenoid graphs (also known as benzene patches, hexagonal systems, to name a few) is an easy-to-understand process but can be very time and labor consuming even with small graphs. On top of this problem, chemical graph theorists are often interested in finding the number of Clar and Fries face of the graph which are indictors of the stability of the patch that the graph represents. Finding all this information accurately can be time consuming and is hard or even impossible to generalize as details seem to be dependent on the structure of the graph.
-This program is capable of generating graphs, determining if it is Kekulean, find all possible perfect matchings, determine the Clar and Fries number of each structure and output the results to a PNG file for later review (this makes up modules 1-4). It also has added modules that can be added on at a researchers discretion based on whatever topic they are working on (this makes up modules 5-quit).
+This program is capable of generating graphs, determining if it is Kekulean, find all possible perfect matchings, determine the Clar and Fries number of each structure and output the results to a PNG file for later review (this makes up modules 1-4). It also has added modules that can be added on at a researcher's discretion based on whatever topic they are working on (this makes up modules 5-quit).
 
 ###Technical Details of the program
 
@@ -96,16 +99,34 @@ In theory, one can combine two graphs together at each other required edge to ob
 This portion of the program will ask the user which graph, out of all the combined graphs in CombinedGraphs, they would like to view. The program will then display details of the graphs and will also ask the user which kekule structure they would like t view. An image will be displayed that contains the Kekule structure, all bonds including required edges, and any Clar and Fries faces that structure contains.
 
 ###Test Conjecture
-Users can test a conjecture that relates the number of Kekule structures, verticies, and faces of two graphs to their respective Clar and Fries numbers. In theory if we take two graphs with an equal number of verticies, the graph with the greater number of Kekule structures should also have a higher clar number. This program has shown that this is not true. The rest of this module test different dependencies to see when this conjecture would also fail. These different dependencies are still under development and results should not be trusted to be 100% accurate.
+Users can test a conjecture that relates the number of Kekule structures, verticies, and faces of two graphs to their respective Clar and Fries numbers. In theory if we take two graphs with an equal number of verticies, the graph with the greater number of Kekule structures should also have a higher clar number. This program has shown that this is not true. The rest of this module test different dependencies to see when this conjecture would also fail. THere are now several additions to this module, including the ability to test the conjecture with the restriction that not only the number of verticies must be equal, but the number of faces as well.
+
+###Subset Conjecture
+Users can test a conjecture stating that the faces belong to the Clar set must be a subset of the faces belonging to the Fries set. This module can be very time intesive and should only be run on machines with at least 8GB of memory dedicated to the program. THis module can handle graphs up to 8X8 in size, but will take several hours to test.
 
 ###Future Additions
-Future additions to this program, that are not additional conjectures to test, but rather improvments to the overall program are being considered. One such addition would be the ability to remove duplicates from the random graph generator. Another addition being considered would be the ability to interact with the images such as a click-to-add-faces application. This functionality os a ways away but is strongly being considered as it would greatly improve our ability to interact with the graphs rather than hoping the ones we are looking for get randomly generated.
+Future additions to this program, that are not additional conjectures to test, but rather improvments to the overall program are being considered. One such addition would be the ability to remove duplicates from the random graph generator. Another addition being considered would be the ability to interact with the images such as a click-to-add-faces application. This functionality is a ways away but is strongly being considered as it would greatly improve our ability to interact with the graphs rather than hoping the ones we are looking for get randomly generated.
 
 Contact
 -------
 For additional help, questions, or concerns or improvements you want made about this program, the original lead programmer can be reached at smorgasbordator@gmail.com. The new lead programmer can be reached at jameschapmanuconn@gmail.com. If you are interested in joining our project please feel free to contact me at jameschapmanuconn@gmail.com (any positions would not be paid, but your names would appear on any published papers). Please add Kekulean to the subject line for priority.
 
 ###Old versions log
+###Overall Version 2.0.0
+###Terminal Version 1.1.2
+###Bug Fixes
+-Fixed an issue with Combine Graphs where the method would immediately break when trying to see if there were graphs already in the combined folders.
+
+###Additions
+-Upgraded the settings reader to the new GUI version; this speeds up the program significantly.
+
+###Issues
+- If the two graphs being combined during Combine Graphs touch at an non-required edge the program will crash. This is currently being worked on to find a way to determine face touchings, not just face overlaps.
+
+###Coming Soon
+- Remove duplicates should be universal, not just for combine graphs.
+
+- More bug fixes!!!
 ###Version 1.1.0
 ###Bug Fixes
 -Combined Graphs no longer produces graphs that are not Kekulean. You can however view the graphs that were produced in a directory that gets created when the module runs.

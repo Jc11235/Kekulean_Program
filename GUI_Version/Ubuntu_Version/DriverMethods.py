@@ -1068,33 +1068,34 @@ def combineGraphs(root,interval):
 	quit = Button(root, text ="Quit", command = BreakModule)
 	quit.pack(side = LEFT)
 
-	scrollbar = Scrollbar(root)
-	scrollbar.pack(side = RIGHT, fill = Y)
-
-	text = Text(root,yscrollcommand = scrollbar.set)
-	text.pack()
-
-	scrollbar.config(command = text.yview)
-
 	graphNumber = 0
 	superGraphNumber = 0
 	deletedCount = 0
+
+	scrollbar = Scrollbar(root)
+	scrollbar.pack(side = RIGHT,fill = Y)	
+
+	text = Text(root,yscrollcommand = scrollbar.set)
+	text.pack()	
+
+	scrollbar.config(command=text.yview)
 
 	storedGraphs = {}
 
 	timeLimit = 3600 * interval
 
 	t1 = time.time()
-	t2 = time.time()
+	t2 = time.time()	
 
 	while t2 - t1 < timeLimit:
+
+		text.insert(CURRENT,"graph: " + str(graphNumber) + "\n")
 
 		if Break == True:
 			Break = False
 			quit.destroy()
 			break
 		
-		text.insert(CURRENT, "Graph " + str(graphNumber) + "\n")
 		flag = False
 
 #new stuff
@@ -1189,18 +1190,14 @@ def combineGraphs(root,interval):
 							
 							saveSinglePNG(structures[0], superName)
 							addCombinationsPNG(randomGraph, newGraph,superGraph, superGraphNumber, deletedCount)
-							print superGraphNumber
 							
 							superGraphNumber += 1
 		graphNumber += 1
-		
-		text.update_idletasks()
-		quit.update_idletasks()
-		scrollbar.update_idletasks()
 
 		t2 = time.time()
-	text.destroy()
-	scrollbar.destroy()
+
+		quit.update_idletasks()
+		
 	quit.destroy()
 
 def resetCombinedGraphs(root,appInfo,submitGraph,graphNumberEntry,view):
@@ -1219,6 +1216,9 @@ def analyzeCombinedGraphsSetup(root,appInfo,path = "CombinedTemps",extension = "
 	entry = Entry(root, textvariable = graphNumber)
 	entry.pack()
 	runningApps.append(entry)
+
+	if not os.path.exists(path):
+		os.mkdir(path)
 
 	num_files = len([f for f in os.listdir(path)
                 	if os.path.isfile(os.path.join(path, f))])

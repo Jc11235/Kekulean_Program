@@ -3,13 +3,21 @@ import threading
 
 class AppI(object):
 
-	__slots__ = ['runningApps','runningAppsNames','runningThreads']
+	__slots__ = ['runningApps','runningAppsNames','runningThreads','timeUp']
 
 	def __init__(self):
 
 		self.runningApps = []
 		self.runningAppsNames = []
 		self.runningThreads = []
+
+		self.timeUp = False
+
+	def getTimeUp(self):
+		return self.timeUp
+
+	def setTimeUp(self,flag):
+		self.timeUp = flag
 
 	def setApps(self,app,appName):
 		print appName
@@ -20,15 +28,10 @@ class AppI(object):
 		self.runningThreads.append(thread)
 
 	def killApps(self):
-		i = 0
-		print str(len(self.runningApps))
-
 		for apps in self.runningApps:
-			print str(self.runningAppsNames[i]) + "\n"
 			apps.destroy()
 			self.runningApps.remove(apps)
-			i += 1
 
 	def killThreads(self):
 		for threads in self.runningThreads:
-			threads.kill_received = True
+			threads.exit()

@@ -8,7 +8,7 @@ import copy
 #add proper support for sorting
 #make comparison a static member
 class Graph(object):
-	__slots__ = ['faceGraph', 'vertexGraph', 'doubleBonds', 'vertexRoots', 'lastAddPair', 'FriesNumber', 'ClarsNumber', 'Faces', 'maxClars','maxFries', 'numStructures', 'rowCount', 'totalUpperBounds', 'leftMostFace', 'rightMostFace', 'setList']
+	__slots__ = ['friesList','clarList','faceGraph', 'vertexGraph', 'doubleBonds', 'vertexRoots', 'lastAddPair', 'FriesNumber', 'ClarsNumber', 'Faces', 'maxClars','maxFries', 'numStructures', 'rowCount', 'totalUpperBounds', 'leftMostFace', 'rightMostFace', 'setList']
 
 	#This is a class-wide attribute
 	comparison = 'fries'
@@ -30,6 +30,9 @@ class Graph(object):
 
 		self.maxClars = 0
 		self.maxFries = 0
+
+		self.friesList = []
+		self.clarList = []
 
 		self.numStructures = 0
 
@@ -73,6 +76,22 @@ class Graph(object):
 		return self.FriesNumber
 	def getClarsNumber(self):
 		return self.ClarsNumber
+
+	def setClarFaces(self):
+		for f in self.faceGraph:
+			if f.isClars == True:
+				self.clarList.append(f)
+	def getClarFaces(self):
+		self.setClarFaces()
+		return self.clarList
+	def setFriesFaces(self):
+		for f in self.faceGraph:
+			if f.isFries == True:
+				self.friesList.append(f)
+	def getFriesFaces(self):
+		self.setFriesFaces()
+		return self.friesList
+
 	def _countClars(self):
 		for f in self.faceGraph:
 			if f.isClars == True:

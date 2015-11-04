@@ -267,6 +267,8 @@ def runConjectureSameFacesFFCCMenu():
 def runCombineGraphs(submit,label,entry):
 	killsApps()
 
+	root.geometry("400x400")
+
 	entry.update_idletasks()
 
 	interval = v.get()
@@ -275,14 +277,16 @@ def runCombineGraphs(submit,label,entry):
 
 		entry.destroy()
 		label.destroy()
-		submit.destroy()				
+		submit.destroy()						
 
 		def callback():
 
 			combineGraphs(root,interval)
 
+			appInfo.setTimeUp(True)
+
 			global removeButtons
-			global run
+			global run			
 
 			removeButtons = False
 			run = False
@@ -315,9 +319,63 @@ def runCombineGraphs(submit,label,entry):
 					runAnalyzeCombinedGraphsSetup(root)
 					break					
 
+		def textDisplay():
+			t2 = time.time()
+
+			minutes = 0
+			seconds = 0
+			hours = int(interval)
+
+			text = Text(root)
+			text.pack()	
+
+			text.insert(CURRENT,"Initializing...")
+
+			temp1 = 0
+			temp2 = 0
+			newMinute = False
+
+			while appInfo.getTimeUp() == False:
+				t2 = time.time()
+
+				seconds = int(t2) - 60*int(t2/60)		
+
+				if seconds == 59:
+
+					if newMinute == False:
+						temp1 = t2
+						temp2 = t2
+
+					if newMinute == True:
+						temp1 = t2
+
+					if temp1 == temp2:
+						newMinute = True
+						minutes -= 1
+
+					if minutes == -1:
+						hours -= 1
+						minutes = 59
+
+				elif seconds == 60:
+					seconds = 0
+
+				elif seconds == 2:
+					newMinute = False
+
+				displaySeconds = 60 - seconds
+				text.delete('1.0','2.0')
+				text.insert(CURRENT,str(hours) + " Hours " + str(minutes) + " minutes " +  str(displaySeconds) + " seconds left" + "\n")
+		
+				text.update_idletasks()
+
 		t = threading.Thread(target = callback)
 		t.setDaemon(True)
 		t.start()
+
+		tD = threading.Thread(target = textDisplay)
+		tD.setDaemon(True)
+		#tD.start()		
 
 def runAnalyzeCombinedGraphsSetup(root):
 	killsApps()
@@ -432,7 +490,6 @@ def runCreateGraphsManually():
 
 def Quit():
 	os._exit(0)
-	root.destroy()
 
 #ADDS MENUS
 menu = Menu(root)

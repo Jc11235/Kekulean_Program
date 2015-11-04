@@ -86,20 +86,9 @@ def analyzeGraphFromFile(fileName="graph.txt"):
 			print "There are", len(graphs), "PM's"			
 
 			#must be 'fries' or 'clars'
-			graphs.sort()
-			graphs.reverse()
+		
+			#_findRequiredEdges(graphs)
 
-			_findRequiredEdges(graphs)
-
-			#save graphs as PNG file
-			savePNG(graphs, "graphs - Fries.png")
-
-			Graph.comparison = 'clars'
-			graphs.sort()
-			graphs.reverse()
-
-			savePNG(graphs, "graphs - Clars.png")
- 
 			while True:
 				choice = raw_input("Would you like to view the graphs ranked by Fries or Clars? (or quit?) ")
 				while choice.lower() != 'fries' and choice.lower() != 'clars' and choice.lower() != 'quit':
@@ -211,10 +200,19 @@ def createRandomKekulean():
 #Creates a random planar graph, which may not be connected			
 def createRandomGraph():
 	height = randint(settings[2], settings[3])
+
+	print "height: " + str(height)
+
+	maxWidth = 0
 	
 	randGraph = []
 	for i in range(height):
 		rowLength = randint(settings[0], settings[1])
+
+		width = rowLength
+		if width > maxWidth:
+			maxWidth = width
+
 		row = getRow(rowLength, i)
 		while len(row) == 0:
 			row = getRow(rowLength, i)
@@ -222,6 +220,7 @@ def createRandomGraph():
 	
 	if checkAlignment(randGraph) == False:
 		randGraph = createRandomGraph()
+	print "maxWidth: " + str(maxWidth) + "\n"
 	return randGraph
 
 def checkAlignment(graph):
@@ -877,6 +876,114 @@ def testConjectureDifferentFaces(hours=0):
 
 		t2 = time.time()
 		counter += 1
+
+def saveSubsetFaces(foldernameN,graph1,graph2,count):
+
+
+	if not os.path.exists(foldernameN):
+		os.mkdir(foldernameN)
+	folderName = foldernameN + "/" + "_" + str(count)
+
+	#setup folder
+	if not os.path.exists(folderName):
+		os.mkdir(folderName)
+			#print "adding"
+	fileName1 = folderName + "/clar" + ".png"
+	fileName2 = folderName + "/fries" + ".png"
+			#print fileName1
+	saveSinglePNG(graph1,fileName1)
+	saveSinglePNG(graph2,fileName2)
+
+def clarSubsetDetermination(hours =0):
+
+	temp = 0	
+	graphNumber = 0
+
+	if hours == 0:
+		interval = float(raw_input("How many hours would you like to run the program? "))
+	else:
+		interval = hours
+
+	timeLimit = 3600 * interval
+	print "limit:", timeLimit
+
+	t1 = time.time()
+	t2 = time.time()
+
+	counter = 0
+	while t2 - t1 < timeLimit:
+		print "graph #" + str(counter)
+
+		#creates a face graphs
+		randomFaces = createRandomGraph()
+		vertexGraph = []
+
+		#Finds connected graph
+		while len(vertexGraph) % 2 != 0 or len(vertexGraph) == 0 or countPeaksAndValleys(randomFaces) == False or isConnected(faceGraphToInts(randomFaces)) == False: 
+			randomFaces = createRandomGraph()
+			vertexGraph = makeVertexGraph(randomFaces)	
+
+		randomGraph = Graph(randomFaces, vertexGraph)
+
+		perfectMatchingThm = isKekulean(randomGraph)
+
+		if perfectMatchingThm == True:
+			structures = assignMatching(randomGraph)
+
+			randomGraph.setMaxClarManual(setMaxClar(randomGraph))
+			randomGraph.setMaxFriesManual(setMaxFries(randomGraph))
+			
+			clarStructure = randomGraph.getMaxClarStructure(structures);
+			friesStructure = randomGraph.getMaxFriesStructure(structures);
+
+			clarStructure.setClarFaces();
+			friesStructure.setFriesFaces();
+
+			clarFaces = clarStructure.getClarFaces();
+			friesFaces = friesStructure.getFriesFaces();
+
+			conjecture = True;
+
+			for f in clarFaces:
+				if f.isFries == False:
+					conjecture = False;
+
+			if(conjecture == False):
+
+				print 'Conjecture is false'
+
+				foldername = "SubsetConjectureConflicts" 
+				
+				saveSubsetFaces(foldername,clarStructure,friesStructure,temp)
+
+				folderName = "SubsetConjectureConflicts/" + "_" + str(temp)
+				fileName = folderName + "/"  + str(temp)+"_" + "info.txt" 
+
+				f = open(fileName,'w')							
+				f.write("C: " + str(randomGraph.getMaxClar()) + " f: " + str(randomGraph.getMaxFries()) +"\n")
+			
+				f.close()
+
+				temp += 1
+			else:
+				foldername = "SubsetConjecture" 
+				
+				saveSubsetFaces(foldername,clarStructure,friesStructure,graphNumber)
+
+				folderName = "SubsetConjecture/" + "_" + str(graphNumber)
+				fileName = folderName + "/"  + str(graphNumber)+"_" + "info.txt" 
+
+				f = open(fileName,'w')							
+				f.write("C: " + str(randomGraph.getMaxClar()) + " f: " + str(randomGraph.getMaxFries()) +"\n")
+			
+				f.close()
+
+			#only adds graphs to list if it under some number of vertices
+		t2 = time.time()
+		counter += 1
+		graphNumber +=1
+		conjecture = True
+
 
 def findHighestClars(graphs):
 	clars = 0

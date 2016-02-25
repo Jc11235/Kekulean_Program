@@ -879,7 +879,6 @@ def testConjectureDifferentFaces(hours=0):
 
 def saveSubsetFaces(foldernameN,graph1,graph2,count):
 
-
 	if not os.path.exists(foldernameN):
 		os.mkdir(foldernameN)
 	folderName = foldernameN + "/" + "_" + str(count)
